@@ -45,6 +45,9 @@ const env = process.env.ENV || 'simple-registration'
 async function selenium() {
     try {
         if (/simple-registration/i.test(env)) {
+            /**
+             * @property {string} registration
+             */
             prefix = prefix + SIMPLE_REGISTRATION
 
             await driver.get(prefix)
@@ -63,9 +66,57 @@ async function selenium() {
 
             await driver.close()
         } else if (/radio-button-form/i.test(env)) {
+            /**
+             * @property {string} radio
+             */
             prefix = prefix + RADIO_BUTTON_FORM
+
+            await driver.get(prefix)
+            await delay(1500)
+
+            await driver.findElement(By.css('#title')).sendKeys('Title must be at least 20 characters!')
+            await delay(1000)
+
+            await driver.findElement(By.css('#description')).sendKeys('Description must be minimum 20 characters!')
+            await delay(1000)
+
+            await driver.findElement(By.css('div:nth-child(3) > div > div:nth-child(2) > label > span.custom-control-indicator')).click()
+            await delay(1000)
+
+            await driver.findElement(By.css('#submit')).click()
+            await delay(1000)
+
+            await driver.close()
+
         } else if (/checkbox-form/i.test(env)) {
+            /**
+             * @property {string} checkbox
+             */
             prefix = prefix + CHECKBOX_FORM
+
+            await driver.get(prefix)
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//input[@id='name']")).sendKeys('Name is required!')
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//input[@id='comment']")).sendKeys('Comment is optional!')
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//input[@value='one-bed-appartment']/following::span")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-checkbox[@value='breakfast']/label/span")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-checkbox[@value='dinner']/label/span")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//button[@id='submit']")).click()
+            await delay(1000)
+
+            await driver.close()
+
         } else if (/dropdown-form/i.test(env)) {
             prefix = prefix + DROPDOWN_FORM
         } else if (/datepicker-form/i.test(env)) {
