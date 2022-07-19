@@ -118,18 +118,186 @@ async function selenium() {
             await driver.close()
 
         } else if (/dropdown-form/i.test(env)) {
+            /**
+             * @property {string} dropdown
+             */
             prefix = prefix + DROPDOWN_FORM
-        } else if (/datepicker-form/i.test(env)) {
-            prefix = prefix + DATEPICKER_FORM
-        } else if (/file-form/i.test(env)) {
-            prefix = prefix + FILE_FORM
-        } else if (/iframe-form/i.test(env)) {
-            prefix = prefix + IFRAME_FORM
-        } else {
+
+            await driver.get(prefix)
+            await delay(1000)
+
+            /**
+             * @param {xpath} //nb-option[@value='1']
+             * @param {xpath} //nb-select[@formcontrolname='select1']/button
+             * @param {xpath} //select[@formcontrolname='select4']/option[@value='volvo']
+             * @param {css} #submit
+             */
+
+            const dropdown = await driver.findElement(By.xpath("//nb-select[@formcontrolname='select1']/button"))
+            dropdown.click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-option[@value='1']")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-option[@value='3']")).click()
+            await delay(1000)
+
+            dropdown.click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath(`//select[@formcontrolname="select2"]/option[@value="2: 'opel'"]`)).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-select[@formcontrolname='select3']/button")).click()
+            await delay(1000)
             
+            await driver.findElement(By.xpath("//nb-option[@value='4']")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath(`//select[@formcontrolname='select4']/option[@value='opel']`)).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//button[@id='submit']")).click()
+            await delay(1000)
+
+            await driver.close()
+        } else if (/datepicker-form/i.test(env)) {
+            /**
+             * @property {string} datepicker
+             */
+            prefix = prefix + DATEPICKER_FORM
+
+            await driver.get(prefix)
+            await delay(1000)
+
+            /**
+             * @param {xpath} //input[@formcontrolname='dateOne']
+             * @param {xpath} //input[@formcontrolname='dateTwo']
+             */
+
+            await driver.findElement(By.xpath("//input[@formcontrolname='dateOne']")).sendKeys('Jul 23, 2022')
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//input[@formcontrolname='dateTwo']")).sendKeys('Jul 5, 2022 - Jul 21, 2022')
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//nb-card-header")).click()
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//button[@id='submit']")).click()
+            await delay(1000)
+
+            await driver.close()
+        } else if (/file-form/i.test(env)) {
+            /**
+             * @property {string} file
+             */
+            prefix = prefix + FILE_FORM
+
+            await driver.get(prefix)
+            await delay(1000)
+
+            /**
+             * @param {xpath} //input[@formcontrolname='file']
+             */
+
+            await driver.findElement(By.xpath("//input[@formcontrolname='file']")).sendKeys(__dirname + '/filename.txt')
+            await delay(1000)
+
+            await driver.findElement(By.xpath("//button[@id='submit']")).click()
+            await delay(1000)
+
+            await driver.close()
+
+        } else if (/iframe-form/i.test(env)) {
+            /**
+             * @property {string} iframe
+             */
+            prefix = prefix + IFRAME_FORM
+
+            await driver.get(prefix)
+            await delay(1000)
+
+            /**
+             * @param {xpath} //input[@aria-labelledby='i1']
+             */
+
+            await driver.switchTo().frame(0)
+            await driver.findElement(By.xpath("//input[@aria-labelledby='i1']")).sendKeys('MakeRounds')
+            await delay(1000)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await driver.actions().sendKeys(Key.ARROW_DOWN).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.ARROW_DOWN).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.ARROW_DOWN).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.findElement(By.css('div > .ry3kXd')).click()
+            await driver.actions().sendKeys(Key.ARROW_DOWN).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.ARROW_DOWN).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.ENTER).perform()
+            await delay(1000)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys('06').perform()
+            await driver.actions().sendKeys('13').perform()
+            await driver.actions().sendKeys('2000').perform()
+
+            await delay(1000)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.SPACE).perform()
+            await delay(1000)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.SPACE).perform()
+            await delay(1000)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys('Something perfect!').perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.TAB).perform()
+            await delay(500)
+
+            await driver.actions().sendKeys(Key.ENTER).perform()
+            await delay(5000)
+
+            await driver.close()
+            
+        } else {
+            console.log('No environment found')
         }
     } catch (e) {
         console.log(e)
+        await driver.close()
         throw e
     }
 }
