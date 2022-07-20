@@ -2,10 +2,13 @@ const { Builder, By, Key, until } = require('selenium-webdriver')
 const chrome = require('selenium-webdriver/chrome')
 const chromedriver = require('chromedriver')
 const proxy = require('selenium-webdriver/proxy')
+const dotenv = require('dotenv')
 
 chrome.setDefaultService(new chrome.ServiceBuilder(chromedriver.path).build())
 
-require('dotenv/config')
+dotenv.config({
+    path: '../.env'
+})
 
 // const proxyParams = '123.25.15.209:9812'
 
